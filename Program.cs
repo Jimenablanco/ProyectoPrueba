@@ -3,10 +3,10 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 
 
-string nombre1 = "Jimena";
+//string nombre1 = "Jimena";
 //int edad = 31;
 //double precio = 20.50;
-bool estaNublado = true;
+//bool estaNublado = true;
 //char inicialApellido = 'B';
 DateTime dateTime = DateTime.Now;
 //DateOnly fechaSolo;
@@ -14,20 +14,25 @@ DateTime dateTime = DateTime.Now;
 
 //const string constanteSaludo = "Buen dia";
 
-string saludo;
+//string saludo;
 
-if (estaNublado)
-{
+//if (estaNublado)
+//{
     //saludo = "Hola " + nombre + "!. Hoy no es un buen dia";
-    saludo = $"Hola {nombre1}!. Hoy no es un buen dia";
-}
-else
-{
-    saludo = "Hola " + nombre1 + "!. Que lindo dia es hoy!";
-}
+//    saludo = $"Hola {nombre1}!. Hoy no es un buen dia";
+//}
+//else
+//{
+//    saludo = "Hola " + nombre1 + "!. Que lindo dia es hoy!";
+//}
 
 
-Console.WriteLine(saludo);
+//Console.WriteLine(saludo);
+
+
+
+
+
 
 //TAREA
 
@@ -93,9 +98,9 @@ else if (num7 >= 7 && num7 <= 10)
 int num = 0;
 int sumaTotal = 0;
 
-while (num < 11)
+while (num <= 10)
 {
-    Console.WriteLine(num);
+    //Console.WriteLine(num);
     sumaTotal += num;
     num++;
 }
@@ -114,3 +119,10 @@ foreach (int numero in miArray)
 
 Console.WriteLine("El producto total es: " + productoTotal);
 
+//Ejemplo null
+//string?[] cadenasConNull = new string?[5] { "uno", "", null, "cuatro", "cinco" };
+
+//foreach (var item in cadenasConNull)
+//{
+//    Console.WriteLine(item ?? "Sin valor");
+//}
