@@ -241,69 +241,91 @@ using System.Text.RegularExpressions;
 
 //TAREA CREAR CURSO CON ALUMNOS Y PROFESOR
 
-//Profesor profesor = new Profesor(28083297, "Carlos", "Santillan", new DateOnly(1980, 4, 12), 20);
-//Curso curso1 = new Curso("Programación", 3, profesor);
+List<Curso> listaCursos = new List<Curso>();
 
-
-//DATOS DEL CURSO
-Console.WriteLine("DATOS DEL CURSO");
-Console.Write("Ingrese el nombre del curso: ");
-string nombreCurso = Console.ReadLine();
-
-Console.Write("Ingrese la cantidad máxima de alumnos: ");
-int cantidadMaximaAlumnos = int.Parse(Console.ReadLine());
-
-//DATOS DEL PROFESOR
-Console.WriteLine("DATOS DEL PROFESOR");
-Console.WriteLine("Ingrese los datos del profesor:");
-Console.Write("DNI: ");
-long dniProfesor = long.Parse(Console.ReadLine());
-
-Console.Write("Nombre: ");
-string nombreProfesor = Console.ReadLine();
-
-Console.Write("Apellido: ");
-string apellidoProfesor = Console.ReadLine();
-
-Console.Write("Fecha de Nacimiento (dd/mm/aaaa): ");
-string fechaProfesor = Console.ReadLine();
-DateOnly fechaNacimientoProfesor = new DateOnly(int.Parse(fechaProfesor.Substring(6, 4)), int.Parse(fechaProfesor.Substring(3, 2)), int.Parse(fechaProfesor.Substring(0, 2)));
-
-Console.Write("Años de experiencia: ");
-int añosExperiencia = int.Parse(Console.ReadLine());
-
-Profesor profesor = new Profesor(dniProfesor, nombreProfesor, apellidoProfesor, fechaNacimientoProfesor, añosExperiencia);
-Curso curso1 = new Curso(nombreCurso, cantidadMaximaAlumnos, profesor);
-
-
-//DATOS DE LOS ALUMNOS
-for (int i = 0; i < curso1.CantidadMaximaAlumnos; i++)
+while (true)
 {
-    Console.WriteLine($"Ingrese el alumno numero {i + 1}");
+    //DATOS DEL CURSO
+    Console.WriteLine("DATOS DEL CURSO");
+    Console.Write("Ingrese el nombre del curso (ó escriba FIN para terminar): ");
+    string nombreCurso = Console.ReadLine();
+
+    if (nombreCurso.ToUpper() == "FIN") break;
+
+    Console.Write("Ingrese la cantidad máxima de alumnos: ");
+    int cantidadMaximaAlumnos = int.Parse(Console.ReadLine());
+
+    //DATOS DEL PROFESOR
+    Console.WriteLine("DATOS DEL PROFESOR");
+    Console.WriteLine("Ingrese los datos del profesor:");
     Console.Write("DNI: ");
-    long dni = long.Parse(Console.ReadLine());
-    
+    long dniProfesor = long.Parse(Console.ReadLine());
+
     Console.Write("Nombre: ");
-    string nombre = Console.ReadLine();
-    
+    string nombreProfesor = Console.ReadLine();
+
     Console.Write("Apellido: ");
-    string apellido = Console.ReadLine();
-    
-    Console.Write("Fecha de Nacimiento (dd/mm/aaaa: ");
-    string fecha = Console.ReadLine();
-    DateOnly fechaNacimiento = new(int.Parse(fecha.Substring(6, 4)), int.Parse(fecha.Substring(3, 2)), int.Parse(fecha.Substring(0, 2)));
-    
-    Console.Write("Trabaja? (SI/NO: ");
-    bool trabaja = Console.ReadLine() == "SI";
+    string apellidoProfesor = Console.ReadLine();
 
-    curso1.Alumnos[i] = new Alumno(dni, nombre, apellido, fechaNacimiento, trabaja);
+    Console.Write("Fecha de Nacimiento (dd/mm/aaaa): ");
+    string fechaProfesor = Console.ReadLine();
+    DateOnly fechaNacimientoProfesor = new DateOnly(int.Parse(fechaProfesor.Substring(6, 4)), int.Parse(fechaProfesor.Substring(3, 2)), int.Parse(fechaProfesor.Substring(0, 2)));
+
+    Console.Write("Años de experiencia: ");
+    int añosExperiencia = int.Parse(Console.ReadLine());
+
+    Profesor profesor = new Profesor(dniProfesor, nombreProfesor, apellidoProfesor, fechaNacimientoProfesor, añosExperiencia);
+    Curso curso = new Curso(nombreCurso, cantidadMaximaAlumnos, profesor);
+
+    //DATOS DE LOS ALUMNOS
+    for (int i = 0; i < cantidadMaximaAlumnos; i++)
+    {
+        Console.WriteLine($"Ingrese el alumno numero {i + 1}");
+        Console.Write("DNI: ");
+        long dni = long.Parse(Console.ReadLine());
+
+        Console.Write("Nombre: ");
+        string nombre = Console.ReadLine();
+
+        Console.Write("Apellido: ");
+        string apellido = Console.ReadLine();
+
+        Console.Write("Fecha de Nacimiento (dd/mm/aaaa: ");
+        string fecha = Console.ReadLine();
+        DateOnly fechaNacimiento = new(int.Parse(fecha.Substring(6, 4)), int.Parse(fecha.Substring(3, 2)), int.Parse(fecha.Substring(0, 2)));
+
+        Console.Write("Trabaja? (SI/NO: ");
+        bool trabaja = Console.ReadLine().ToUpper() == "SI";
+
+        Alumno alumno = new Alumno(dni, nombre, apellido, fechaNacimiento, trabaja);
+
+        if (!curso.AgregarAlumno(alumno))
+        {
+            Console.WriteLine("No se puede agregar más alumnos al curso.");
+            break;
+        }
+    }
+
+    listaCursos.Add(curso);
 }
 
-
-//INFO DEL CURSO Y LOS ALUMNOS
-Console.WriteLine($"Los alumnos del curso {curso1.Nombre} con el profesor {curso1.Profesor.Nombre} {curso1.Profesor.Apellido} son:");
-for (int i = 0; i < curso1.CantidadMaximaAlumnos; i++)
+//INFO DE LOS CURSOS CON SUS PROFESORES Y ALUMNOS
+Console.WriteLine("Listado de cursos:");
+foreach (var curso in listaCursos)
 {
-    Console.WriteLine($"Alumno {i + 1}: {curso1.Alumnos[i].Nombre} {curso1.Alumnos[i].Apellido}");
+    Console.WriteLine($"Curso: {curso.Nombre}");
+    Console.WriteLine($"Profesor: {curso.Profesor.Nombre} {curso.Profesor.Apellido}");
+    Console.WriteLine("Alumnos:");
+    for (int i = 0; i < curso.Alumnos.Count; i++)
+    {
+        Console.WriteLine($"- {curso.Alumnos[i].Nombre} {curso.Alumnos[i].Apellido}");
+    }
 }
+
+
+
+
+
+
+
 
