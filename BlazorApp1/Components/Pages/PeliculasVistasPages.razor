@@ -1,0 +1,132 @@
+﻿@page "/peliculasVistasPages"
+@rendermode InteractiveServer
+@using BlazorApp1.Entities;
+<PageTitle>Home</PageTitle>
+
+<h1 class="text-primary"><strong>PELÍCULAS QUE VÍ</strong></h1>
+<h3 class="text-body-secondary">Agregar una película</h3>
+
+<div class="mt-4">
+    <div class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="nombrePelicula" class="col-form-label">Nombre de la película</label>
+        </div>
+        <div class="col-auto">
+            <input type="text" id="nombrePelicula" @bind="nombrePelicula" class="form-control form-control-sm" required />
+        </div>
+        <div class="col-auto">
+            <label for="valoracionSelect" class="col-form-label">Valoración:</label>
+        </div>
+        <div class="col-auto">
+            <select id="valoracionSelect" @bind="valoracion" class="form-select form-select-sm" required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            @if (Editando)
+            {
+                <button type="button" @onclick="GuardarEdicion" class="btn btn-primary">Guardar edición</button>
+            }
+            else
+            {
+                <button type="button" @onclick="AgregarPelicula" class="btn btn-primary">Agregar</button>
+            }
+        </div>
+    </div>
+    @if (!string.IsNullOrWhiteSpace(mensajeError))
+    {
+        <div class="alert alert-danger mt-3" role="alert">
+            <i class="bi bi-exclamation-circle"></i> @mensajeError
+        </div>
+    }
+</div>
+
+<h3 class="mt-5">Películas agregadas</h3>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th class="text-center">Valoración</th>
+            <th class="text-center">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int contador = 1;
+        }
+        @foreach (var item in peliculasList)
+        {
+            <tr>
+                <td>@contador</td>
+                <td>@item.Nombre</td>
+                <td class="text-center">@($"{item.Valoracion} / 5 ")<i class="bi bi-star-fill"></i></td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-secondary btn-sm" @onclick="()=> Editar(item)">Editar</button>
+                    <button type="button" class="btn btn-danger btn-sm" @onclick="()=> Eliminar(item)">Eliminar</button>
+                </td>
+            </tr>
+            contador++;
+        }
+    </tbody>
+</table>
+
+@code {
+    private string nombrePelicula = "";
+    private int valoracion = 1;
+    private List<Pelicula> peliculasList = new();
+    private bool Editando = false;
+    private Pelicula? EditandoPelicula; //el ? indica que la propiedad puede tener valor null
+    private string mensajeError = "";
+
+    private bool ValidarNombrePelicula()
+    {
+        if (string.IsNullOrWhiteSpace(nombrePelicula))
+        {
+            mensajeError = "El nombre de la película no puede estar vacío.";
+            return false;
+        }
+        mensajeError = "";
+        return true;
+    }
+
+    private void AgregarPelicula()
+    {
+        if (ValidarNombrePelicula())
+        {
+            peliculasList.Add(new Pelicula(nombrePelicula, valoracion));
+            nombrePelicula = string.Empty;
+            valoracion = 1;
+        }
+    }
+
+    private void Editar(Pelicula peliculaEditar)
+    {
+        Editando = true;
+        EditandoPelicula = peliculaEditar;
+
+        nombrePelicula = peliculaEditar.Nombre;
+        valoracion = peliculaEditar.Valoracion;
+    }
+
+    private void GuardarEdicion()
+    {
+        if (ValidarNombrePelicula())
+        {
+            EditandoPelicula.Nombre = nombrePelicula;
+            EditandoPelicula.Valoracion = valoracion;
+            Editando = false;
+            nombrePelicula = string.Empty;
+            valoracion = 1;
+        }
+    }
+
+    private void Eliminar(Pelicula peliculaEditar)
+    {
+        peliculasList.Remove(peliculaEditar);
+    }
+}
